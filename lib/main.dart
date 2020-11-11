@@ -1,19 +1,33 @@
 import 'package:flutter/material.dart';
 
-import './question.dart';
-import './answer.dart';
+import './quiz.dart';
+import './result.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _MyAppState();
   }
 }
 
 class _MyAppState extends State<MyApp> {
+  final _questions = const [
+    {
+      'questionText': 'What\'s your name?',
+      'answers': ['Kisha', 'Mia', 'Adrienne', 'Michael'],
+    },
+    {
+      'questionText': 'What\'s your favourite color?',
+      'answers': ['Mauve', 'Lavender', 'Pink', 'Cyan'],
+    },
+    {
+      'questionText': 'What\'s your favourite hobby?',
+      'answers': ['Coding', 'Eating', 'Sleeping', 'None of the above'],
+    },
+  ];
+
   var _questionIndex = 0;
 
   void _answerQuestion() {
@@ -21,24 +35,25 @@ class _MyAppState extends State<MyApp> {
       _questionIndex = _questionIndex + 1;
     });
     print(_questionIndex);
+    if (_questionIndex < _questions.length) {
+      print('we have more questions');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    var questions = ['What\'s your name?', 'What\'s your favourite color?'];
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Kisha'),
+          title: Text('Mini Quiz'),
         ),
-        body: Column(
-          children: [
-            Question(questions[_questionIndex]),
-            Answer(_answerQuestion),
-            Answer(_answerQuestion),
-            Answer(_answerQuestion),
-          ],
-        ),
+        body: _questionIndex < _questions.length
+            ? Quiz(
+                answerQuestion: _answerQuestion,
+                questionIndex: _questionIndex,
+                questions: _questions,
+              )
+            : Result(),
       ),
     );
   }
